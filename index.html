@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>CASIO Hesap Makinesi</title>
+
+<style>
+body {
+    background: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial;
+}
+
+.calculator {
+    background: #3a3a3a;
+    padding: 22px;
+    border-radius: 14px;
+    width: 320px;
+}
+
+.brand {
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+#display {
+    width: 100%;
+    height: 60px;
+    font-size: 26px;
+    text-align: right;
+    margin-bottom: 18px;
+    padding-right: 10px;
+    background: #cfd8c3;
+    border: none;
+    border-radius: 6px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+button {
+    height: 60px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.light { background: #d9d9d9; }
+.dark { background: #555; color: white; }
+.orange { background: orange; }
+
+.equal {
+    grid-column: span 2;
+    background: #555;
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+    <div class="brand">NS</div>
+    <input type="text" id="display" disabled>
+
+    <div class="buttons">
+        <button class="orange" onclick="allClear()">AC</button>
+        <button class="orange" onclick="clearEntry()">C</button>
+        <button class="dark" onclick="back()">⌫</button>
+        <button class="dark" onclick="ekle('/')">÷</button>
+
+        <button class="light" onclick="ekle('7')">7</button>
+        <button class="light" onclick="ekle('8')">8</button>
+        <button class="light" onclick="ekle('9')">9</button>
+        <button class="dark" onclick="ekle('*')">×</button>
+
+        <button class="light" onclick="ekle('4')">4</button>
+        <button class="light" onclick="ekle('5')">5</button>
+        <button class="light" onclick="ekle('6')">6</button>
+        <button class="dark" onclick="ekle('-')">−</button>
+
+        <button class="light" onclick="ekle('1')">1</button>
+        <button class="light" onclick="ekle('2')">2</button>
+        <button class="light" onclick="ekle('3')">3</button>
+        <button class="dark" onclick="ekle('+')">+</button>
+
+        <button class="light" onclick="ekle('0')">0</button>
+        <button class="light" onclick="ekle('.')">.</button>
+        <button class="equal" onclick="hesapla()">=</button>
+    </div>
+</div>
+
+<script>
+let ekran = document.getElementById("display");
+
+/* BUTON İŞLEMLERİ */
+function ekle(x) {
+    ekran.value += x;
+}
+
+function hesapla() {
+    try {
+        ekran.value = eval(ekran.value);
+    } catch {
+        ekran.value = "Hata";
+    }
+}
+
+function clearEntry() {
+    ekran.value = "";
+}
+
+function allClear() {
+    ekran.value = "";
+}
+
+function back() {
+    ekran.value = ekran.value.slice(0, -1);
+}
+
+/* ⌨️ KLAVYE DESTEĞİ */
+document.addEventListener("keydown", function (e) {
+    const tus = e.key;
+
+    if (!isNaN(tus) || tus === ".") {
+        ekle(tus);
+    }
+    else if (tus === "+" || tus === "-" || tus === "*" || tus === "/") {
+        ekle(tus);
+    }
+    else if (tus === "Enter") {
+        e.preventDefault();
+        hesapla();
+    }
+    else if (tus === "Backspace") {
+        back();
+    }
+    else if (tus === "Escape") {
+        allClear();
+    }
+});
+</script>
+
+</body>
+</html>
