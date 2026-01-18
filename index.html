@@ -2,151 +2,208 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>CASIO Hesap Makinesi</title>
+<title>NS Hesap Makinesi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
 body {
-    background: #ddd;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: Arial;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #2c3e50, #4ca1af);
 }
 
 .calculator {
-    background: #3a3a3a;
-    padding: 22px;
-    border-radius: 14px;
-    width: 320px;
+  width: 340px;
+  background: #1e1e1e;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #aaa;
+  font-weight: bold;
+  margin-bottom: 6px;
 }
 
 .brand {
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 8px;
+  font-size: 14px;
 }
 
-#display {
-    width: 100%;
-    height: 60px;
-    font-size: 26px;
-    text-align: right;
-    margin-bottom: 18px;
-    padding-right: 10px;
-    background: #cfd8c3;
-    border: none;
-    border-radius: 6px;
+.display {
+  height: 70px;
+  background: #000;
+  color: #0f0;
+  font-size: 30px;
+  text-align: right;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow-x: auto;
 }
 
 .buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 }
 
 button {
-    height: 60px;
-    font-size: 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
+  height: 55px;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #333;
+  color: #fff;
 }
 
-.light { background: #d9d9d9; }
-.dark { background: #555; color: white; }
-.orange { background: orange; }
+button:hover { background: #555; }
 
-.equal {
-    grid-column: span 2;
-    background: #555;
-    color: white;
-}
+.operator { background: #ff9500; }
+.equal { background: #4cd964; color: #000; }
+.clear { background: #ff3b30; }
+.function { background: #444; font-size: 16px; }
 </style>
 </head>
 
 <body>
 
 <div class="calculator">
+
+  <div class="header">
     <div class="brand">NS</div>
-    <input type="text" id="display" disabled>
+    <div></div>
+  </div>
 
-    <div class="buttons">
-        <button class="orange" onclick="allClear()">AC</button>
-        <button class="orange" onclick="clearEntry()">C</button>
-        <button class="dark" onclick="back()">⌫</button>
-        <button class="dark" onclick="ekle('/')">÷</button>
+  <div id="display" class="display">0</div>
 
-        <button class="light" onclick="ekle('7')">7</button>
-        <button class="light" onclick="ekle('8')">8</button>
-        <button class="light" onclick="ekle('9')">9</button>
-        <button class="dark" onclick="ekle('*')">×</button>
+  <div class="buttons">
+    <button class="function" onclick="setFunction('sqrt')">√</button>
+    <button class="function" onclick="setFunction('power')">xʸ</button>
+    <button class="function" onclick="setFunction('sin')">sin</button>
+    <button class="function" onclick="setFunction('cos')">cos</button>
 
-        <button class="light" onclick="ekle('4')">4</button>
-        <button class="light" onclick="ekle('5')">5</button>
-        <button class="light" onclick="ekle('6')">6</button>
-        <button class="dark" onclick="ekle('-')">−</button>
+    <button class="function" onclick="setFunction('tan')">tan</button>
+    <button class="function" onclick="setFunction('cot')">cot</button>
+    <button class="clear" onclick="clearAll()">C</button>
+    <button class="operator" onclick="appendOperator('/')">÷</button>
 
-        <button class="light" onclick="ekle('1')">1</button>
-        <button class="light" onclick="ekle('2')">2</button>
-        <button class="light" onclick="ekle('3')">3</button>
-        <button class="dark" onclick="ekle('+')">+</button>
+    <button onclick="appendNumber('7')">7</button>
+    <button onclick="appendNumber('8')">8</button>
+    <button onclick="appendNumber('9')">9</button>
+    <button class="operator" onclick="appendOperator('*')">×</button>
 
-        <button class="light" onclick="ekle('0')">0</button>
-        <button class="light" onclick="ekle('.')">.</button>
-        <button class="equal" onclick="hesapla()">=</button>
-    </div>
+    <button onclick="appendNumber('4')">4</button>
+    <button onclick="appendNumber('5')">5</button>
+    <button onclick="appendNumber('6')">6</button>
+    <button class="operator" onclick="appendOperator('-')">−</button>
+
+    <button onclick="appendNumber('1')">1</button>
+    <button onclick="appendNumber('2')">2</button>
+    <button onclick="appendNumber('3')">3</button>
+    <button class="operator" onclick="appendOperator('+')">+</button>
+
+    <button onclick="appendNumber('0')">0</button>
+    <button onclick="appendNumber('.')">.</button>
+    <button class="equal" onclick="calculate()" style="grid-column: span 2">=</button>
+  </div>
 </div>
 
 <script>
-let ekran = document.getElementById("display");
+const display = document.getElementById("display");
 
-/* BUTON İŞLEMLERİ */
-function ekle(x) {
-    ekran.value += x;
+let resultShown = false;
+let pendingFunction = null;
+let powerBase = null;
+
+/* SAYI */
+function appendNumber(value) {
+  if (resultShown) {
+    display.innerText = value;
+    resultShown = false;
+  } else if (display.innerText === "0") {
+    display.innerText = value;
+  } else {
+    display.innerText += value;
+  }
 }
 
-function hesapla() {
-    try {
-        ekran.value = eval(ekran.value);
-    } catch {
-        ekran.value = "Hata";
-    }
+/* OPERATÖR */
+function appendOperator(op) {
+  resultShown = false;
+  display.innerText += op;
 }
 
-function clearEntry() {
-    ekran.value = "";
+/* FONKSİYON */
+function setFunction(func) {
+  if (func === "power") {
+    powerBase = Number(display.innerText);
+  }
+  pendingFunction = func;
+  resultShown = false;
+  display.innerText = "0";
 }
 
-function allClear() {
-    ekran.value = "";
+/* HESAPLA */
+function calculate() {
+  let value = Number(display.innerText);
+
+  try {
+    if (pendingFunction) {
+      switch (pendingFunction) {
+        case "sqrt": value = Math.sqrt(value); break;
+        case "sin": value = Math.sin(toRad(value)); break;
+        case "cos": value = Math.cos(toRad(value)); break;
+        case "tan": value = Math.tan(toRad(value)); break;
+        case "cot": value = 1 / Math.tan(toRad(value)); break;
+        case "power": value = Math.pow(powerBase, value); powerBase = null; break;
+      }
+      pendingFunction = null;
+    } else {
+      value = eval(display.innerText);
+    }
+
+    display.innerText = Number(value.toFixed(6));
+    resultShown = true;
+
+  } catch {
+    display.innerText = "Hata";
+    resultShown = true;
+  }
 }
 
-function back() {
-    ekran.value = ekran.value.slice(0, -1);
+/* TEMİZLE */
+function clearAll() {
+  display.innerText = "0";
+  pendingFunction = null;
+  powerBase = null;
+  resultShown = false;
 }
 
-/* ⌨️ KLAVYE DESTEĞİ */
-document.addEventListener("keydown", function (e) {
-    const tus = e.key;
+function toRad(deg) {
+  return deg * Math.PI / 180;
+}
 
-    if (!isNaN(tus) || tus === ".") {
-        ekle(tus);
-    }
-    else if (tus === "+" || tus === "-" || tus === "*" || tus === "/") {
-        ekle(tus);
-    }
-    else if (tus === "Enter") {
-        e.preventDefault();
-        hesapla();
-    }
-    else if (tus === "Backspace") {
-        back();
-    }
-    else if (tus === "Escape") {
-        allClear();
-    }
+/* KLAVYE */
+document.addEventListener("keydown", e => {
+  if (!isNaN(e.key) || e.key === ".") appendNumber(e.key);
+  if ("+-*/".includes(e.key)) appendOperator(e.key);
+  if (e.key === "Enter") calculate();
+  if (e.key === "Backspace") {
+    display.innerText = display.innerText.slice(0, -1) || "0";
+  }
 });
 </script>
 
